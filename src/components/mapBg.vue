@@ -344,6 +344,42 @@ export default {
   data() {
     return {
       myChart: null,
+      provList: [
+        ["黑龙江", "#F09ABD"],
+        ["吉林省", "#01933F"],
+        ["辽宁", "#FAC300"],
+        ["内蒙古", "#FCF502"],
+        ["河北", "#F09ABD"],
+        ["北京", "#FCF502"],
+        ["天津", "#01933F"],
+        ["山东省", "#FCF502"],
+        ["江苏", "#D8EDDA"],
+        ["上海", "#B9B4C8"],
+        ["浙江", "#FCF502"],
+        ["福建", "#FAC300"],
+        ["台湾", "#F09ABD"],
+        ["广东", "#FCF502"],
+        ["香港", "#F09ABD"],
+        ["澳门", "#F09ABD"],
+        ["海南", "#F09ABD"],
+        ["广西", "#FAC300"],
+        ["云南", "#FCF502"],
+        ["西藏", "#B9B4C8"],
+        ["新疆", "#FAC300"],
+        ["甘肃", "#01933F"],
+        ["青海", "#F09ABD"],
+        ["四川", "#FAC300"],
+        ["贵州", "#01933F"],
+        ["重庆", "#B9B4C8"],
+        ["湖南", "#F09ABD"],
+        ["江西", "#01933F"],
+        ["湖北", "#FCF502"],
+        ["安徽", "#FAC300"],
+        ["河南", "#B9B4C8"],
+        ["陕西", "#F09ABD"],
+        ["山西", "#01933F"],
+        ["宁夏", "#FAC300"]
+      ],
       currentIndex: undefined,
       polar: {
         baseOption: {
@@ -685,10 +721,42 @@ export default {
   },
   mounted() {
     this.myChart = echarts.init(document.getElementById("chartStock"));
+
+    this.provList.forEach(item => {
+      this.getBoundary(item);
+    });
     this.myChart.on("timelinechanged", params => {
       this.currentIndex = params.currentIndex;
       console.log(this.currentIndex);
     });
+  },
+  methods: {
+    getBoundary(provItem) {
+      var map = this.myChart
+        .getModel()
+        .getComponent("bmap")
+        .getBMap();
+      // console.log(provItem);
+      var bdary = new BMap.Boundary();
+      bdary.get(provItem[0], function(rs) {
+        //获取行政区域
+        var count = rs.boundaries.length; //行政区域的点有多少个
+        if (count === 0) {
+          alert("未能获取当前输入行政区域");
+          return;
+        }
+        var pointArray = [];
+        for (var i = 0; i < count; i++) {
+          let ply = new BMap.Polygon(rs.boundaries[i], {
+            strokeWeight: 1,
+            strokeColor: "#aaaaaa",
+            fillColor: provItem[1]
+          }); //建立多边形覆盖物
+          map.addOverlay(ply); //添加覆盖物
+          pointArray = pointArray.concat(ply.getPath());
+        }
+      });
+    }
   },
   watch: {
     currentIndex: function() {

@@ -57,7 +57,6 @@ export default {
     },
     labelType: {
       type: String,
-      default: "percent"
     }
   },
   components: {
@@ -172,15 +171,12 @@ export default {
         vm.showHoverValue(vm.itemStyle[index], vm.valueArr[index]);
         vm.pieSelectIndex += 1;
 
-        // console.log( this.$refs.ecInstance)
       }, 3000);
     }
   },
   computed: {
     getDefaultLabelValue() {
-      return this.labelType === "percent"
-        ? this.defaultPercent
-        : this.defaultValue;
+      return  this.defaultValue;
     },
     getHoverLabelVal() {
       return this.labelType === "percent" ? this.hoverPercent : this.hoverValue;

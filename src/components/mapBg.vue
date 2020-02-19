@@ -313,7 +313,38 @@ var geoCoordMap = {
   菏泽: [115.480656, 35.23375],
   合肥: [117.27, 31.86],
   武汉: [114.31, 30.52],
-  大庆: [125.03, 46.58]
+  大庆: [125.03, 46.58],
+  湖北:[113.298572,30.684355],
+  广东:[113.280637,23.125178],
+  河南:[113.665412,33.757975],
+  浙江:[120.153576,29.287459],
+  湖南:[111.782279,28.09409],
+  安徽:[117.283042,31.26119],
+  江西:[115.592151,27.676493],
+  江苏:[119.767413,33.041544],
+  山东:[118.000923,36.275807],
+  四川:[104.065735,30.659462],
+  黑龙江:[128.642464,46.756967],
+  河北:[114.502461,38.045474],
+  福建:[118.306239,26.075302],
+  陕西:[111.849248,36.857014],
+  广西:[108.320004,22.82402],
+  云南:[101.512251,24.740609],
+  海南:[109.83119,19.031971],
+  贵州:[106.713478,26.578343],
+  山西:[111.849248,36.857014],
+  天津:[117.190182,39.125596],
+  辽宁:[123.429096,41.796767],
+  甘肃:[103.823557,36.058039],
+  吉林:[125.3245,43.886841],
+  新疆:[85.617733,40.792818],
+  内蒙古:[111.670801,41.818311],
+  宁夏:[106.278179,37.26637],
+  香港:[114.173355,22.320048],
+  台湾:[121.509062,24.044332],
+  青海:[96.778916,35.623178],
+  澳门:[113.54909,22.198951],
+  西藏:[89.132212,30.860361]
 };
 var convertData = function(data) {
   var res = [];
@@ -345,40 +376,40 @@ export default {
     return {
       myChart: null,
       provList: [
-        ["黑龙江", "#F09ABD"],
-        ["吉林省", "#01933F"],
-        ["辽宁", "#FAC300"],
-        ["内蒙古", "#FCF502"],
-        ["河北", "#F09ABD"],
-        ["北京", "#FCF502"],
-        ["天津", "#01933F"],
-        ["山东省", "#FCF502"],
-        ["江苏", "#D8EDDA"],
-        ["上海", "#B9B4C8"],
-        ["浙江", "#FCF502"],
-        ["福建", "#FAC300"],
-        ["台湾", "#F09ABD"],
-        ["广东", "#FCF502"],
+        ["黑龙江", "rgb(152,17,11)"],
+        ["吉林省", "rgb(189,22,11)"],
+        ["辽宁", "rgb(189,22,11)"],
+        ["内蒙古", "#ff0000"],
+        ["河北", "rgb(152,17,11)"],
+        ["北京", "rgb(152,17,11)"],
+        ["天津", "rgb(190,22,11)"],
+        ["山东省", "rgb(152,17,11)"],
+        ["江苏", "rgb(152,17,11)"],
+        ["上海", "rgb(152,17,11)"],
+        ["浙江", "rgba(143,0,2,.7)"],
+        ["福建", "rgb(152,17,11)"],
+        ["台湾", "rgb(189,22,11)"],
+        ["广东", "rgba(143,0,2,.7)"],
         ["香港", "#F09ABD"],
         ["澳门", "#F09ABD"],
-        ["海南", "#F09ABD"],
-        ["广西", "#FAC300"],
-        ["云南", "#FCF502"],
-        ["西藏", "#B9B4C8"],
-        ["新疆", "#FAC300"],
-        ["甘肃", "#01933F"],
-        ["青海", "#F09ABD"],
-        ["四川", "#FAC300"],
-        ["贵州", "#01933F"],
-        ["重庆", "#B9B4C8"],
-        ["湖南", "#F09ABD"],
-        ["江西", "#01933F"],
-        ["湖北", "#FCF502"],
-        ["安徽", "#FAC300"],
-        ["河南", "#B9B4C8"],
-        ["陕西", "#F09ABD"],
-        ["山西", "#01933F"],
-        ["宁夏", "#FAC300"]
+        ["海南", "rgb(189,22,11)"],
+        ["广西", "rgb(152,17,11)"],
+        ["云南", "rgb(152,17,11)"],
+        ["西藏", "#ff2400"],
+        ["新疆", "#ff0000"],
+        ["甘肃", "#ff0000"],
+        ["青海", "#ff0000"],
+        ["四川", "rgba(152,17,11,.7)"],
+        ["贵州", "rgb(190,22,11)"],
+        ["重庆", "rgb(152,17,11)"],
+        ["湖南", "rgb(152,17,11)"],
+        ["江西", "rgb(152,17,11)"],
+        ["湖北", "rgb(103,16,11)"],
+        ["安徽", "rgb(152,17,11)"],
+        ["河南", "rgb(152,17,11)"],
+        ["陕西", "rgb(152,17,11)"],
+        ["山西", "rgb(190,22,11)"],
+        ["宁夏", "#ff0000"]
       ],
       currentIndex: undefined,
       polar: {
@@ -449,7 +480,7 @@ export default {
             animationEasingUpdate: "quinticInOut"
           },
           bmap: {
-            center: [115.97, 29.71],
+           /* center: [115.97, 29.71],*/
             zoom: 5,
             roam: true,
             mapStyle: {
@@ -720,8 +751,7 @@ export default {
     };
   },
   mounted() {
-    this.myChart = echarts.init(document.getElementById("chartStock"));
-
+    this.myChart = echarts.init(document.getElementById("chartStock"))
     this.provList.forEach(item => {
       this.getBoundary(item);
     });
@@ -741,10 +771,6 @@ export default {
       bdary.get(provItem[0], function(rs) {
         //获取行政区域
         var count = rs.boundaries.length; //行政区域的点有多少个
-        if (count === 0) {
-          alert("未能获取当前输入行政区域");
-          return;
-        }
         var pointArray = [];
         for (var i = 0; i < count; i++) {
           let ply = new BMap.Polygon(rs.boundaries[i], {
@@ -756,7 +782,30 @@ export default {
           pointArray = pointArray.concat(ply.getPath());
         }
       });
+    },
+    getTrend(){
+      this.axios.get("https://demodev.24e.co/wuhan/getTrend").then(res=>{
+        let data = this.convertData(res.data.inland);
+        console.log(res.data.inland);
+        this.polar.options[0].series[0].data = this.convertData(res.data.inland)
+      })
+    },
+    convertData(data) {
+      var res = [];
+      for (var i = 0; i < data.length; i++) {
+        var geoCoord = geoCoordMap[data[i].name];
+        if (geoCoord) {
+          res.push({
+            name: data[i].name,
+            value: geoCoord.concat(data[i].value)
+          });
+        }
+      }
+      return res;
     }
+  },
+  created() {
+    this.getTrend();
   },
   watch: {
     currentIndex: function() {
@@ -767,4 +816,12 @@ export default {
 </script>
 
 <style>
+
+  .BMap_cpyCtrl {
+    display:none;
+  }
+
+  .anchorBL{
+    display:none;
+  }
 </style>

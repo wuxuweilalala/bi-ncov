@@ -16,7 +16,7 @@ export default {
 <style lang="scss" scoped>
 .titleHeader {
   position: relative;
-  margin-bottom: 0.7vw;
+  margin-bottom: 0.2vw;
   span {
     font-size: 0.8vw;
     margin-left: 0.3vw;

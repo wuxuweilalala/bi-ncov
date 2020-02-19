@@ -1,13 +1,13 @@
 <template>
   <div class="indexWrapper">
     <leftSide class="left" />
-    <rightSide class="right" />
+    <rightSide class="right" :addNumArray="addNumArray" />
     <mapBg class="mapBg" />
     <div class="numPadWrapper">
-      <numPad class="numPad" title="确诊病例" numString="24378" addNum="3908" />
-      <numPad class="numPad" title="疑似病例" numString="23260" addNum="3971" />
-      <numPad class="numPad" title="治愈病例" numString="902" addNum="272" />
-      <numPad class="numPad" title="死亡病例" numString="491" addNum="66" />
+      <numPad class="numPad" title="确诊病例" :numString="numString1" :addNum="addNum1" />
+      <numPad class="numPad" title="疑似病例" :numString="numString2" :addNum="addNum2" />
+      <numPad class="numPad" title="治愈病例" :numString="numString3" :addNum="addNum3" />
+      <numPad class="numPad" title="死亡病例" :numString="numString4" :addNum="addNum4" />
     </div>
   </div>
 </template>
@@ -24,10 +24,48 @@ export default {
     rightSide,
     mapBg,
     numPad
+  },
+  data(){
+    return {
+      numString1:"",
+      numString2:"",
+      numString3:"",
+      numString4:"",
+      addNum1:"",
+      addNum2:"",
+      addNum3:"",
+      addNum4:"",
+      addNumArray:[],
+      sevenData:[]
+    }
+  },
+  created() {
+  this.getSituation();
+  this.get7DayData();
+  },
+  methods: {
+    getSituation(){
+      this.axios.get("https://demodev.24e.co/wuhan/getSituation").then(res=>{
+        this.numString1 = res.data[0].toString()
+        this.numString2 = res.data[4].toString()
+        this.numString3 = res.data[2].toString()
+        this.numString4 = res.data[3].toString()
+      })
+    },
+    get7DayData(){
+      this.axios.get("https://demodev.24e.co/wuhan/get7DayData").then(res=>{
+        const data = res.data.Tendency.seriesData;
+        this.addNum1 = data[0].value[data[0].value.length -1] - data[0].value[data[0].value.length -2];
+        this.addNum2 = data[4].value[data[4].value.length -1] - data[4].value[data[4].value.length -2];
+        this.addNum3 = data[2].value[data[2].value.length -1] - data[2].value[data[2].value.length -2];
+        this.addNum4 = data[3].value[data[3].value.length -1] - data[3].value[data[3].value.length -2];
+        this.addNumArray = [this.addNum1,this.addNum2,this.addNum3,this.addNum4]
+      })
+    }
   }
 };
 </script>
- 
+
 <style lang="scss" scoped>
 .indexWrapper {
   .left {

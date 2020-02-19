@@ -3,7 +3,7 @@
     <div class="leftTitle">
       <div class="titleWrapper">
         <titleHeader
-          title="2020.02.05各省市区疫情统计"
+          :title="titleTime"
           englishTitle="2020.02.05 Statistics of epidemic situation by province"
         />
       </div>
@@ -27,25 +27,7 @@
       </div>
     </div>
     <div class="barCharts">
-      <div class="chartList">
-        <div class="chartsTitle">
-          <span>01</span>
-          <span>湖北</span>
-        </div>
-        <stackBar class="stackBar" :options="barOptions" />
-      </div>
-      <div class="chartList">
-        <div class="chartsTitle">
-          <span>01</span>
-          <span>湖北</span>
-        </div>
-        <stackBar class="stackBar" :options="barOptions" />
-      </div>
-      <div class="chartList">
-        <div class="chartsTitle">
-          <span>01</span>
-          <span>湖北</span>
-        </div>
+      <div class="chartList" >
         <stackBar class="stackBar" :options="barOptions" />
       </div>
     </div>
@@ -55,6 +37,7 @@
 <script>
 import stackBar from "@/components/stackBar.vue";
 import titleHeader from "@/components/titleHeader.vue";
+import { timeFormatter } from "@/utils/utils.js";
 export default {
   name: "leftSide",
   components: {
@@ -63,6 +46,7 @@ export default {
   },
   data() {
     return {
+      titleTime:'',
       barOptions: {
         tooltip: {
           trigger: "axis",
@@ -70,14 +54,15 @@ export default {
             type: "shadow"
           }
         },
+
         legend: {
           show: false,
           data: ["确诊", "治愈", "死亡"]
         },
         grid: {
           left: "-10%",
-          top: "100%",
-          bottom: "100%",
+          top: "98%",
+          bottom: "98%",
           containLabel: true
         },
         xAxis: {
@@ -86,8 +71,9 @@ export default {
         },
         yAxis: {
           type: "category",
+          inverse: true,
           show: false,
-          data: ["01"]
+          data: [],
         },
         series: [
           {
@@ -96,7 +82,20 @@ export default {
             color: "#fb2c4b",
             barWidth: 5,
             stack: "总量",
-            data: [320]
+            label: {
+              normal: {
+                show: true,
+                position: [0, '-20'],
+                textStyle: {
+                  fontSize: 12,
+                  color: '#fff',
+                },
+                formatter: function(data){
+                  return `${data.dataIndex+1}     ${data.name}`;
+                }
+              }
+            },
+            data: []
           },
           {
             name: "治愈",
@@ -104,7 +103,7 @@ export default {
             color: "#00ff06",
             barWidth: 5,
             stack: "总量",
-            data: [120]
+            data: []
           },
           {
             name: "死亡",
@@ -112,11 +111,29 @@ export default {
             color: "#c7c7c7",
             barWidth: 5,
             stack: "总量",
-            data: [220]
+            data: []
           }
         ]
-      }
+      },
+      barArray:[]
     };
+  },
+  beforeMount() {
+    let time = timeFormatter({ prefix: true });
+    this.titleTime = time.date + '各省市区疫情统计';
+    this.getTrend()
+  },
+  methods:{
+    getTrend(){
+      this.axios.get("https://demodev.24e.co/wuhan/getTrend").then(res=>{
+        for(let i of res.data.inland.slice(0,18)) {
+          this.barOptions.series[0].data.push(i.value) ;
+          this.barOptions.series[1].data.push(i.cureNum) ;
+          this.barOptions.series[2].data.push(i.deadNum) ;
+          this.barOptions.yAxis.data.push(i.name)  ;
+        }
+      })
+    }
   }
 };
 </script>
@@ -189,7 +206,7 @@ export default {
       }
       .stackBar {
         width: 16vw;
-        height: 2vw;
+        height: 40vw;
       }
     }
   }

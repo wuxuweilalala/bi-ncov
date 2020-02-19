@@ -31,8 +31,6 @@ import titleHeader from "@/components/titleHeader.vue";
 import stackBar from "@/components/stackBar.vue";
 import pie from "@/components/pie.vue";
 import {
-  lineOptions1,
-  lineOptions2,
   barOption
 } from "../chartOptions/options.js";
 export default {
@@ -42,6 +40,7 @@ export default {
     pie,
     stackBar
   },
+  props:{addNumArray:Array},
   data() {
     return {
       areaCategoryArr: [3512, 2001, 1863, 800],
@@ -49,32 +48,238 @@ export default {
         {
           name: "确诊",
           itemStyle: {
-            color: "#00ffff"
+            color: "#fb2c4b"
           }
         },
         {
           name: "疑似",
           itemStyle: {
-            color: "#42f412"
+            color: "#ffff00"
           }
         },
         {
           name: "治愈",
           itemStyle: {
-            color: "#0066ff"
+            color: "#00ff06"
           }
         },
         {
           name: "死亡",
           itemStyle: {
-            color: "#f62742"
+            color: "#c7c7c7"
           }
         }
       ],
-      lineOptions1,
-      lineOptions2,
+      lineOptions1:{
+        tooltip: {
+          trigger: "axis"
+        },
+        dataZoom: [{
+          type: 'inside',
+          zoomOnMouseWheel: false,
+          startValue: 0,
+          endValue: 6
+        }],
+        legend: {
+          icon: "rect",
+          itemGap: 3,
+          top: "",
+          right: "0",
+          itemWidth: 8,
+          itemHeight: 8,
+          textStyle: {
+            color: "#fff",
+            fontSize: 10
+          },
+          data: ["确诊", "疑似", "治愈", "死亡"]
+        },
+        background: "transparent",
+        grid: {
+          left: "3%",
+          right: "4%",
+          top: "25%",
+          containLabel: true
+        },
+        height: "70%",
+        xAxis: {
+          type: "category",
+          axisTick: {
+            show: false
+          },
+          axisLine: {
+            lineStyle: {
+              color: "#858a8d"
+            }
+          },
+          axisLabel: {
+            fontSize: 10
+          },
+          data: ["周一", "周二", "周三", "周四", "周五", "周六", "周日"]
+        },
+        yAxis: {
+          type: "value",
+          name: "病例",
+          nameTextStyle: {
+            color: "#858a8d"
+          },
+          axisTick: {
+            show: false
+          },
+          axisLine: {
+            lineStyle: {
+              color: "#858a8d"
+            }
+          },
+          splitLine: {
+            show: false
+          },
+          axisLabel: {
+            fontSize: 10
+          }
+        },
+        series: [
+          {
+            name: "确诊",
+            type: "line",
+            color: "#fb2c4b",
+            data: [120, 132, 101, 134, 90, 230, 210]
+          },
+          {
+            name: "疑似",
+            type: "line",
+            color: "#ffff00",
+            data: [220, 182, 191, 234, 290, 330, 310]
+          },
+          {
+            name: "治愈",
+            type: "line",
+            color: "#00ff06",
+            data: [150, 232, 201, 154, 190, 330, 410]
+          },
+          {
+            name: "死亡",
+            type: "line",
+            color: "#c7c7c7",
+            data: [320, 332, 301, 334, 390, 330, 320]
+          }
+        ]
+      },
+      lineOptions2:{
+        tooltip: {
+          trigger: "axis"
+        },
+        dataZoom: [{
+          type: 'inside',
+          zoomOnMouseWheel: false,
+          startValue: 0,
+          endValue: 6
+        }],
+        legend: {
+          icon: "rect",
+          itemGap: 3,
+          top: "",
+          right: "0",
+          itemWidth: 8,
+          itemHeight: 8,
+          textStyle: {
+            color: "#fff",
+            fontSize: 10
+          },
+          data: ["确诊增速", "疑似增速", "治愈增速", "死亡增速"]
+        },
+        background: "transparent",
+        grid: {
+          left: "3%",
+          right: "4%",
+          top: "25%",
+          containLabel: true
+        },
+        height: "70%",
+        xAxis: {
+          type: "category",
+          axisTick: {
+            show: false
+          },
+          axisLine: {
+            lineStyle: {
+              color: "#858a8d"
+            }
+          },
+          axisLabel: {
+            fontSize: 10
+          },
+          data: ["周一", "周二", "周三", "周四", "周五", "周六", "周日"]
+        },
+        yAxis: {
+          type: "value",
+          name: "增长率(%)",
+          nameTextStyle: {
+            color: "#858a8d"
+          },
+          axisTick: {
+            show: false
+          },
+          axisLine: {
+            lineStyle: {
+              color: "#858a8d"
+            }
+          },
+          splitLine: {
+            show: false
+          },
+          axisLabel: {
+            fontSize: 10
+          }
+        },
+        series: [
+          {
+            name: "确诊增速",
+            type: "line",
+            color: "#fb2c4b",
+            data: [120, 132, 101, 134, 90, 230, 210]
+          },
+          {
+            name: "疑似增速",
+            type: "line",
+            color: "#ffff00",
+            data: [220, 182, 191, 234, 290, 330, 310]
+          },
+          {
+            name: "治愈增速",
+            type: "line",
+            color: "#00ff06",
+            data: [150, 232, 201, 154, 190, 330, 410]
+          },
+          {
+            name: "死亡增速",
+            type: "line",
+            color: "#c7c7c7",
+            data: [320, 332, 301, 334, 390, 330, 320]
+          }
+        ]
+      },
       barOption
     };
+  },
+  mounted(){
+   this.get7DayData();
+  },
+  methods:{
+    get7DayData(){
+      this.axios.get("https://demodev.24e.co/wuhan/get7DayData").then(res=>{
+        console.log(res.data);
+        this.lineOptions1.xAxis.data = res.data.Tendency.xData;
+        this.lineOptions1.series[0].data = res.data.Tendency.seriesData[0].value;
+        this.lineOptions1.series[1].data = res.data.Tendency.seriesData[4].value;
+        this.lineOptions1.series[2].data = res.data.Tendency.seriesData[2].value;
+        this.lineOptions1.series[3].data = res.data.Tendency.seriesData[3].value;
+        this.lineOptions2.xAxis.data = res.data.Speed.xData;
+        this.lineOptions2.series[0].data = res.data.Speed.seriesData[0].value;
+        this.lineOptions2.series[1].data = res.data.Speed.seriesData[4].value;
+        this.lineOptions2.series[2].data = res.data.Speed.seriesData[2].value;
+        this.lineOptions2.series[3].data = res.data.Speed.seriesData[3].value;
+      })
+    }
   }
 };
 </script>
@@ -86,7 +291,7 @@ export default {
   .chartItem {
     position: relative;
     /* background-color: rgba(0, 0, 0, 0.5); */
-    margin-bottom: 1.6vw;
+    margin-bottom: 0.2vw;
     &:nth-child(2) {
       .echarts {
         width: 17.8vw;

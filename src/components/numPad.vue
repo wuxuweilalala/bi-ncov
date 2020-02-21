@@ -2,10 +2,15 @@
   <div class="numPad">
     <div class="numTop">
       <span class="numTitle">{{title}}</span>
-      <div class="numRight">
-        <img class="arrow" src="../assets/imgs/arrow.svg" />
+      <div class="numRight" v-if="addNum > 0">
+        <img class="arrow" src="@/assets/imgs/addArrow.svg" />
         <span class="addNum">{{addNum}}</span>
       </div>
+      <div class="numRight" v-if="addNum < 0">
+      <img class="arrow deleteArrow" src="@/assets/imgs/deleteArrow.svg" />
+      <span class="addNum deleteNum">{{Math.abs(addNum)}}</span>
+    </div>
+
     </div>
     <div class="numBottom">
       <num :numString="numString" />
@@ -37,14 +42,22 @@ export default {
       margin-right: 0.7vw;
     }
     .numRight {
+      display: flex;
+      align-items: center;
       .addNum {
         font-size: 0.6vw;
         color: #fb2c4b;
       }
+      .deleteNum {
+        color: #00ff06
+      }
       .arrow {
-        width: 0.3vw;
-        height: 0.6vw;
+        width: 0.6vw;
+        height: 1.2vw;
         margin-right: 0.3vw;
+      }
+      .deleteArrow {
+        transform: rotate(180deg);
       }
     }
   }

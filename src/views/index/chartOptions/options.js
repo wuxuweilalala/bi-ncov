@@ -1,4 +1,4 @@
-const dataCost = ["7,123", "8,234", "9,323"]
+const dataCost = ['430',"504", "521", "720"]
 
 
 
@@ -26,12 +26,12 @@ export const barOption = {
         axisLine: {
             show: false,
         },
-        data: ['医院三', '医院二', '医院一 ']
+        data: ['武汉市第五医院','武汉市武昌医院', '武汉市中心医院', '武汉市金银潭医院 ']
     },
     height: "60%",
     series: [{
         type: 'bar',
-        barGap: '-100%',
+        barGap: '-90%',
         label: {
             normal: {
                 show: true,
@@ -44,18 +44,18 @@ export const barOption = {
                     },
             }
         },
-        barWidth: '35%',
+        barWidth: '10%',
         itemStyle: {
             normal: {
                 borderWidth: 2,
                 color: 'rgba(255, 255, 255,.15)'
             },
         },
-        data: [1, 1, 1],
+        data: [1, 1, 1,1],
     }, {
         type: 'bar',
-        barGap: '-98%',
-        barWidth: '33%',
+        barGap: '-88%',
+        barWidth: '10%',
         itemStyle: {
             normal: {
                 color: function (param) {
@@ -90,150 +90,7 @@ export const barOption = {
                 }
             },
         },
-        data: [0.2, 0.201, 1],
+        data: [1, 1, 1,1],
     }]
 }
 
-export const polar = {
-    backgroundColor: 'rgb(1,16,24)"',
-    tooltip: {
-        trigger: "item"
-    },
-    bmap: {
-        center: [104.114129, 37.550339],
-        zoom: 5,
-        roam: true,
-        mapStyle: {
-            styleJson: [
-                {
-                    featureType: "water",
-                    elementType: "all",
-                    stylers: {
-                        color: "#044161"
-                    }
-                },
-                {
-                    featureType: "land",
-                    elementType: "all",
-                    stylers: {
-                        color: "#004981"
-                    }
-                },
-                {
-                    featureType: "boundary",
-                    elementType: "geometry",
-                    stylers: {
-                        color: "#064f85"
-                    }
-                },
-                {
-                    featureType: "railway",
-                    elementType: "all",
-                    stylers: {
-                        visibility: "off"
-                    }
-                },
-                {
-                    featureType: "highway",
-                    elementType: "geometry",
-                    stylers: {
-                        color: "#004981"
-                    }
-                },
-                {
-                    featureType: "highway",
-                    elementType: "geometry.fill",
-                    stylers: {
-                        color: "#005b96",
-                        lightness: 1
-                    }
-                },
-                {
-                    featureType: "highway",
-                    elementType: "labels",
-                    stylers: {
-                        visibility: "off"
-                    }
-                },
-                {
-                    featureType: "arterial",
-                    elementType: "geometry",
-                    stylers: {
-                        color: "#004981"
-                    }
-                },
-                {
-                    featureType: "arterial",
-                    elementType: "geometry.fill",
-                    stylers: {
-                        color: "#00508b"
-                    }
-                },
-                {
-                    featureType: "poi",
-                    elementType: "all",
-                    stylers: {
-                        visibility: "off"
-                    }
-                },
-                {
-                    featureType: "green",
-                    elementType: "all",
-                    stylers: {
-                        color: "#056197",
-                        visibility: "off"
-                    }
-                },
-                {
-                    featureType: "subway",
-                    elementType: "all",
-                    stylers: {
-                        visibility: "off"
-                    }
-                },
-                {
-                    featureType: "manmade",
-                    elementType: "all",
-                    stylers: {
-                        visibility: "off"
-                    }
-                },
-                {
-                    featureType: "local",
-                    elementType: "all",
-                    stylers: {
-                        visibility: "off"
-                    }
-                },
-                {
-                    featureType: "arterial",
-                    elementType: "labels",
-                    stylers: {
-                        visibility: "off"
-                    }
-                },
-                {
-                    featureType: "boundary",
-                    elementType: "geometry.fill",
-                    stylers: {
-                        color: "#029fd4"
-                    }
-                },
-                {
-                    featureType: "building",
-                    elementType: "all",
-                    stylers: {
-                        color: "#1a5787"
-                    }
-                },
-                {
-                    featureType: "label",
-                    elementType: "all",
-                    stylers: {
-                        visibility: "off"
-                    }
-                }
-            ]
-        }
-    }
-}

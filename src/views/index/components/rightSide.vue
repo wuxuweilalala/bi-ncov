@@ -40,10 +40,10 @@ export default {
     pie,
     stackBar
   },
-  props:{addNumArray:Array},
+  props:['numArr'],
   data() {
     return {
-      areaCategoryArr: [3512, 2001, 1863, 800],
+      areaCategoryArr: [887, 287, 1558, 117],
       itemStyle: [
         {
           name: "确诊",
@@ -95,7 +95,7 @@ export default {
         },
         background: "transparent",
         grid: {
-          left: "3%",
+          left: "0%",
           right: "4%",
           top: "25%",
           containLabel: true
@@ -258,7 +258,7 @@ export default {
           }
         ]
       },
-      barOption
+      barOption,
     };
   },
   mounted(){
@@ -267,7 +267,8 @@ export default {
   methods:{
     get7DayData(){
       this.axios.get("https://demodev.24e.co/wuhan/get7DayData").then(res=>{
-        console.log(res.data);
+        let data = res.data.Tendency
+        this.areaCategoryArr = [data.seriesData[0].value[data.seriesData[0].value.length -1], data.seriesData[4].value[data.seriesData[4].value.length -1],data.seriesData[2].value[data.seriesData[2].value.length -1],data.seriesData[3].value[data.seriesData[3].value.length -1],];
         this.lineOptions1.xAxis.data = res.data.Tendency.xData;
         this.lineOptions1.series[0].data = res.data.Tendency.seriesData[0].value;
         this.lineOptions1.series[1].data = res.data.Tendency.seriesData[4].value;
@@ -280,6 +281,15 @@ export default {
         this.lineOptions2.series[3].data = res.data.Speed.seriesData[3].value;
       })
     }
+  },
+  watch: {
+    // numArr: {
+    //   immediate: true,
+    //   handler(val){
+    //     console.log(val);
+    //     this.areaCategoryArr = [...val];
+    //   }
+    // }
   }
 };
 </script>

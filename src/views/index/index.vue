@@ -1,8 +1,8 @@
 <template>
   <div class="indexWrapper">
-    <leftSide class="left" />
-    <rightSide class="right" :addNumArray="addNumArray" />
-    <mapBg class="mapBg" />
+    <leftSide class="left"  ref="leftCharts"/>
+    <rightSide class="right" :numArr="numArr" />
+    <mapBg class="mapBg" @changeNum="changeNum"/>
     <div class="numPadWrapper">
       <numPad class="numPad" title="确诊病例" :numString="numString1" :addNum="addNum1" />
       <numPad class="numPad" title="疑似病例" :numString="numString2" :addNum="addNum2" />
@@ -27,40 +27,58 @@ export default {
   },
   data(){
     return {
-      numString1:"",
-      numString2:"",
-      numString3:"",
-      numString4:"",
-      addNum1:"",
-      addNum2:"",
-      addNum3:"",
-      addNum4:"",
       addNumArray:[],
-      sevenData:[]
+      sevenData:[],
+      currentIndex:undefined,
+      dayData:[]
     }
   },
+  computed: {
+    numArr(){
+      return [this.dayData.length === 0? '': this.dayData[0].value[this.currentIndex],this.dayData.length === 0? '': this.dayData[4].value[this.currentIndex],this.dayData.length === 0? '': this.dayData[2].value[this.currentIndex],this.dayData.length === 0? '': this.dayData[3].value[this.currentIndex]]
+    },
+    numString1(){
+      return this.dayData.length === 0? '': this.dayData[0].value[this.currentIndex].toString()
+    },
+    numString2(){
+      return this.dayData.length === 0? '': this.dayData[4].value[this.currentIndex].toString()
+    },
+    numString3(){
+      return this.dayData.length === 0? '': this.dayData[2].value[this.currentIndex].toString()
+    },
+    numString4(){
+      return this.dayData.length === 0? '': this.dayData[3].value[this.currentIndex].toString()
+    },
+    addNum1(){
+      return this.dayData.length === 0 ? 0 : this.dayData[0].value[this.currentIndex] - this.dayData[0].value[this.currentIndex -1]
+    },
+    addNum2(){
+      return this.dayData.length === 0 ? 0 : this.dayData[4].value[this.currentIndex] - this.dayData[4].value[this.currentIndex -1]
+    },
+    addNum3(){
+      return this.dayData.length === 0 ? 0 : this.dayData[2].value[this.currentIndex] - this.dayData[2].value[this.currentIndex -1]
+    },
+    addNum4(){
+      return this.dayData.length === 0 ? 0 : this.dayData[3].value[this.currentIndex] - this.dayData[3].value[this.currentIndex -1]
+    },
+  },
   created() {
-  this.getSituation();
-  this.get7DayData();
+    this.get7DayData();
   },
   methods: {
-    getSituation(){
-      this.axios.get("https://demodev.24e.co/wuhan/getSituation").then(res=>{
-        this.numString1 = res.data[0].toString()
-        this.numString2 = res.data[4].toString()
-        this.numString3 = res.data[2].toString()
-        this.numString4 = res.data[3].toString()
-      })
-    },
     get7DayData(){
       this.axios.get("https://demodev.24e.co/wuhan/get7DayData").then(res=>{
         const data = res.data.Tendency.seriesData;
-        this.addNum1 = data[0].value[data[0].value.length -1] - data[0].value[data[0].value.length -2];
-        this.addNum2 = data[4].value[data[4].value.length -1] - data[4].value[data[4].value.length -2];
-        this.addNum3 = data[2].value[data[2].value.length -1] - data[2].value[data[2].value.length -2];
-        this.addNum4 = data[3].value[data[3].value.length -1] - data[3].value[data[3].value.length -2];
+        this.dayData = data;
+        this.currentIndex = data[0].value.length -1;
         this.addNumArray = [this.addNum1,this.addNum2,this.addNum3,this.addNum4]
       })
+    },
+    changeRange(){
+      this.$refs.leftCharts.changeCharts();
+    },
+    changeNum(index) {
+      this.currentIndex = index
     }
   }
 };

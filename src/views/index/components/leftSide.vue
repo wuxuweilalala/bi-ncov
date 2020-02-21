@@ -115,7 +115,7 @@ export default {
           }
         ]
       },
-      barArray:[]
+      barArray:[],
     };
   },
   beforeMount() {
@@ -126,6 +126,7 @@ export default {
   methods:{
     getTrend(){
       this.axios.get("https://demodev.24e.co/wuhan/getTrend").then(res=>{
+        this.barArray = res.data;
         for(let i of res.data.inland.slice(0,18)) {
           this.barOptions.series[0].data.push(i.value) ;
           this.barOptions.series[1].data.push(i.cureNum) ;
@@ -133,6 +134,19 @@ export default {
           this.barOptions.yAxis.data.push(i.name)  ;
         }
       })
+    },
+    changeCharts(){
+      this.barOptions.series[0].data = [];
+      this.barOptions.series[1].data = [];
+      this.barOptions.series[2].data = [];
+      this.barOptions.yAxis.data = [];
+      for(let i of this.barArray.foreign.slice(0,18)) {
+        this.barOptions.series[0].data.push(i.value) ;
+        this.barOptions.series[1].data.push(i.cureNum) ;
+        this.barOptions.series[2].data.push(i.deadNum) ;
+        this.barOptions.yAxis.data.push(i.name)  ;
+      }
+      console.log(this.barOptions);
     }
   }
 };

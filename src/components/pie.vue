@@ -257,7 +257,7 @@ export default {
   width: 7.4vw;
   height: 7.4vw;
   margin-right: 1.5vw;
-  padding-bottom: 1vw;
+  /*padding-bottom: 1vw;*/
 
   .label {
     position: absolute;

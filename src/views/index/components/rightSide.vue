@@ -9,6 +9,7 @@
               }"
         :legendLineShowState="false"
         :itemStyle="itemStyle"
+        :addArr="addArr"
       ></pie>
     </div>
     <div class="chartItem">
@@ -27,13 +28,12 @@
 </template>
 
 <script>
-import titleHeader from "@/components/titleHeader.vue";
-import stackBar from "@/components/stackBar.vue";
-import pie from "@/components/pie.vue";
-import {
-  barOption
-} from "../chartOptions/options.js";
-export default {
+  import titleHeader from "@/components/titleHeader.vue";
+  import stackBar from "@/components/stackBar.vue";
+  import pie from "@/components/pie.vue";
+  import {barOption} from "../chartOptions/options.js";
+
+  export default {
   name: "rightSide",
   components: {
     titleHeader,
@@ -43,7 +43,7 @@ export default {
   props:['numArr'],
   data() {
     return {
-      areaCategoryArr: [887, 287, 1558, 117],
+      areaCategoryArr: [77059, 4149, 23359, 2446],
       itemStyle: [
         {
           name: "确诊",
@@ -259,6 +259,7 @@ export default {
         ]
       },
       barOption,
+      addArr:[]
     };
   },
   mounted(){
@@ -267,6 +268,7 @@ export default {
   methods:{
     get7DayData(){
       this.axios.get("https://demodev.24e.co/wuhan/get7DayData").then(res=>{
+        this.addArr = [res.data.Speed.seriesData[0].value[res.data.Tendency.xData.length - 1] + '%', res.data.Speed.seriesData[4].value[res.data.Tendency.xData.length - 1] + '%', res.data.Speed.seriesData[2].value[res.data.Tendency.xData.length - 1] + '%', res.data.Speed.seriesData[3].value[res.data.Tendency.xData.length - 1] + '%'];
         let data = res.data.Tendency
         this.areaCategoryArr = [data.seriesData[0].value[data.seriesData[0].value.length -1], data.seriesData[4].value[data.seriesData[4].value.length -1],data.seriesData[2].value[data.seriesData[2].value.length -1],data.seriesData[3].value[data.seriesData[3].value.length -1],];
         this.lineOptions1.xAxis.data = res.data.Tendency.xData;

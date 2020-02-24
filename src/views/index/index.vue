@@ -74,8 +74,8 @@ export default {
         this.addNumArray = [this.addNum1,this.addNum2,this.addNum3,this.addNum4]
       })
     },
-    changeRange(){
-      this.$refs.leftCharts.changeCharts();
+    changeRange(type){
+      this.$refs.leftCharts.changeCharts(type);
     },
     changeNum(index) {
       this.currentIndex = index

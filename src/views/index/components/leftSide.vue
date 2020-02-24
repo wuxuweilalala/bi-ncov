@@ -10,7 +10,7 @@
       <div class="borderLeft"></div>
     </div>
     <div class="intro">
-      <span class="leftIntro">各省市</span>
+      <span class="leftIntro">{{titleType}}</span>
       <div class="rightIntro">
         <div class="introList">
           <div class="colorBg1"></div>
@@ -46,6 +46,7 @@ export default {
   },
   data() {
     return {
+      titleType:'各省市',
       titleTime:'',
       barOptions: {
         tooltip: {
@@ -135,18 +136,28 @@ export default {
         }
       })
     },
-    changeCharts(){
+    changeCharts(type){
       this.barOptions.series[0].data = [];
       this.barOptions.series[1].data = [];
       this.barOptions.series[2].data = [];
       this.barOptions.yAxis.data = [];
-      for(let i of this.barArray.foreign.slice(0,18)) {
-        this.barOptions.series[0].data.push(i.value) ;
-        this.barOptions.series[1].data.push(i.cureNum) ;
-        this.barOptions.series[2].data.push(i.deadNum) ;
-        this.barOptions.yAxis.data.push(i.name)  ;
+      if(type === 4) {
+        this.titleType = '各国';
+        for(let i of this.barArray.foreign.slice(0,18)) {
+          this.barOptions.series[0].data.push(i.value) ;
+          this.barOptions.series[1].data.push(i.cureNum) ;
+          this.barOptions.series[2].data.push(i.deadNum) ;
+          this.barOptions.yAxis.data.push(i.name)  ;
+        }
+      }else {
+        this.titleType = '各省市';
+        for(let i of this.barArray.inland.slice(0,18)) {
+          this.barOptions.series[0].data.push(i.value) ;
+          this.barOptions.series[1].data.push(i.cureNum) ;
+          this.barOptions.series[2].data.push(i.deadNum) ;
+          this.barOptions.yAxis.data.push(i.name)  ;
+        }
       }
-      console.log(this.barOptions);
     }
   }
 };

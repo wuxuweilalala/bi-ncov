@@ -27,14 +27,17 @@
         :key="index"
       >
         <span
-          class="circle"
-          :style="{
+                class="circle"
+                :style="{
                     backgroundColor:item.itemStyle.color
                 }"
-        ></span>
+        />
         <span class="name">{{item.name}}</span>
-        <span class="line" v-show="legendLineShowState"></span>
-        <span class="num" v-show="legendLineShowState">{{valueArr[index]}}</span>
+        <span class="line"/>
+        <span class="num">{{(valueArr[index] / (valueArr[0]+valueArr[1]+valueArr[2]+valueArr[3])*100).toFixed(2)}} %</span>
+        <span class="num"  :style="{
+                    color:item.itemStyle.color
+                }">{{addArr[index]}}</span>
       </div>
     </div>
   </div>
@@ -50,6 +53,7 @@ export default {
   props: {
     valueArr: Array,
     itemStyle: Array,
+    addArr:Array,
     chartContainerStyle: Object,
     legendLineShowState: {
       type: Boolean,
@@ -67,6 +71,7 @@ export default {
       pieSelectTimer: null,
       defaultPercent: 0,
       defaultValue: 0,
+      totalValue:0,
       defaultName: "",
       hoverPercent: 0,
       hoverValue: 0,
@@ -100,7 +105,27 @@ export default {
                 show: false
               }
             },
-            data: []
+            data: [{
+              value:this.valueArr[0],
+              itemStyle:{
+                color: '#fb2c4b'
+              }
+            },{
+              value:this.valueArr[1],
+              itemStyle:{
+                color: '#ffff00'
+              }
+            },{
+              value:this.valueArr[2],
+              itemStyle:{
+                color: '#00ff06'
+              }
+            },{
+              value:this.valueArr[3],
+              itemStyle:{
+                color: '#c7c7c7'
+              }
+            }]
           },
           {
             name: "innerCircle",
@@ -187,49 +212,11 @@ export default {
       deep: true,
       immediate: true,
       handler() {
-        const greyItemStyle = {
-          itemStyle: {
-            color: "rgba(66,244,18,0.2)"
-          }
-        };
-        const emptyItemStyle = {
-          itemStyle: {
-            color: "rgba(66,244,18,0)"
-          }
-        };
         let count = sum(this.valueArr);
-        // let max = Math.max(...this.valueArr);
-        let valLength = this.valueArr.length;
-        let total = count / ((100 - valLength * 2) / 100);
-        let emptyVal = ~~(total * 0.02 + 0.5);
-        // this.defaultPercent=(max/count).toFixed(4)*100
         this.defaultValue = this.valueArr[0];
         this.defaultPercent = ((this.valueArr[0] / count) * 100).toFixed(2);
         this.defaultName = this.itemStyle[0].name;
-        let newArray = new Array(valLength * 2);
-        for (let i = 0; i < newArray.length; i++) {
-          if (i % 2 === 0) {
-            _set(this, `options.series[0].data[${i}]`, {
-              value: this.valueArr[i / 2],
-              ...this.itemStyle[i / 2]
-            });
-            _set(this, `options.series[1].data[${i}]`, {
-              value: this.valueArr[i / 2],
-              ...greyItemStyle
-            });
-          } else {
-            _set(this, `options.series[0].data[${i}]`, {
-              value: emptyVal,
-              name: "",
-              ...emptyItemStyle
-            });
-            _set(this, `options.series[1].data[${i}]`, {
-              value: emptyVal,
-              name: "",
-              ...emptyItemStyle
-            });
-          }
-        }
+
       }
     }
   },
@@ -295,7 +282,7 @@ export default {
   display: flex;
   flex-direction: column;
   /*height: 7.4vw;*/
-  width: 6.9vw;
+  width: 8.9vw;
   /*background-color: red;*/
   .item {
     cursor: pointer;
@@ -315,6 +302,7 @@ export default {
     .name {
       line-height: 0.5vw;
       color: #fff;
+      font-size: 0.6vw;
     }
 
     .line {
@@ -337,6 +325,8 @@ export default {
     .num {
       line-height: 0.5vw;
       color: #fff;
+      font-size: 0.6vw;
+      margin-right: 0.5vw;
     }
   }
 }

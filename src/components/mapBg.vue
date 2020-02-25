@@ -50,6 +50,7 @@
             return {
                 isAddBox:true,
                 mapData,
+                cityData:[],
                 boxName:'',
                 value:undefined,
                 cureNum:undefined,
@@ -390,27 +391,6 @@
                                         }
                                     }
                                 },
-                                // {
-                                //     name: "pm2.5",
-                                //     type: "effectScatter",
-                                //     rippleEffect: {
-                                //         brushType: 'stroke'
-                                //     },
-                                //     coordinateSystem: "bmap",
-                                //     data: [],
-                                //     label: {
-                                //         formatter: "{b}确诊{c}例",
-                                //         position: "right"
-                                //     },
-                                //     itemStyle: {
-                                //         color: "red"
-                                //     },
-                                //     emphasis: {
-                                //         label: {
-                                //             show: true
-                                //         }
-                                //     }
-                                // },
                             ]
                         }
                     ]
@@ -477,9 +457,9 @@
                             area:params.name
                         }
                     }).then(res=>{
-                        const convertData = this.convertData(res.data.data,'second');
+                        this.cityData = this.convertData(res.data.data,'second');
                         for(let i of this.polar.options) {
-                            i.series[0].data.push(...convertData)
+                            i.series[0].data.push(...this.cityData)
                         }
                     });
                     for(let i of this.mapData.provinces) {
@@ -535,9 +515,11 @@
                     this.isAddBox = true;
                     this.boxType = 1;
                     for(let i of this.polar.options) {
-                        i.series[0].symbolSize = '20'
+                        i.series[0].symbolSize = '20';
+                        i.series[0].data.splice(59,i.series[0].data.length -1);
+                        // i.series[0].data.push(...this.cityData)
                     }
-                    this.myChart.setOption(this.polar,true)
+                    this.myChart.setOption(this.polar,true);
                 }
             },
             changeNum(index) {

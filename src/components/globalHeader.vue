@@ -62,9 +62,10 @@ export default {
   background-image: url("~@/assets/imgs/titleBg.png");
   background-size: 100% 100%;
   .centerTitle {
+    color: rgba(255, 255, 255, 1);
     font-size: 1.1vw;
     letter-spacing: 0.1vw;
-    text-shadow: 0.08vw 0.08vw 0 #fff;
+    /*text-shadow: 0.08vw 0.08vw 0 #fff;*/
     line-height: 1.8vw;
   }
   .englishTitle {

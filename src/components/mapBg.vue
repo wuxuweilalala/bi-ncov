@@ -246,7 +246,7 @@
                                         featureType: "boundary",
                                         elementType: "geometry",
                                         stylers: {
-                                            color: "green"
+                                            color: "#029fd4"
                                         }
                                     },
                                     {
@@ -346,7 +346,7 @@
                                         featureType: "building",
                                         elementType: "all",
                                         stylers: {
-                                            color: "#1a5787"
+                                            color: "red"
                                         }
                                     },
                                     {
@@ -414,7 +414,7 @@
                 document.querySelector('#box').style.top = y;
                 document.querySelector('#box').style.left = x;
                 let paramsData = {};
-                if(this.type === 1) {
+                if(this.boxType === 1) {
                     paramsData = {region:params.name}
                 }else {
                     paramsData = {region:this.povinceName ,city:params.name}

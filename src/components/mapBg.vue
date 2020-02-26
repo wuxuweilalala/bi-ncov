@@ -409,16 +409,14 @@
         methods: {
             handelBoxShow(params){
                 this.boxShow = true;
+
+
+
                 const x = params.event.offsetX + 20 + 'px';
                 const y = params.event.offsetY - 205 + 'px';
                 document.querySelector('#box').style.top = y;
                 document.querySelector('#box').style.left = x;
-                let paramsData = {};
-                if(this.boxType === 1) {
-                    paramsData = {region:params.name}
-                }else {
-                    paramsData = {region:this.povinceName ,city:params.name}
-                }
+                const paramsData = this.boxType === 1 ? {region:params.name} : {region:this.povinceName ,city:params.name}
                 this.axios.get('https://demodev.24e.co/wuhan/get7DayData',{params:paramsData}).then(res=>{
                    this.lineOptions1.xAxis.data = res.data.Tendency.xData;
                    this.lineOptions1.series[0].data = res.data.Tendency.seriesData[0].value;
